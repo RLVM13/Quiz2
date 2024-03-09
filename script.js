@@ -17,8 +17,8 @@
 
 //FUNCION PARA ESCRIBIR LAS PREGUNTAS ALEATORIAS Y NO SALGAN EN EL MISMO ORDEN
 function PreguntaAleatoria(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+    for (let i = array.length - 1; i > 0; i--) { //SE REALIZAN 2 CAMBIOS ALEATORIOS
+        const j = Math.floor(Math.random() * (i - 0 + 1) + 0);
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
@@ -30,10 +30,20 @@ async function DibujarPreguntas() {
         .then((res) => res.json()) // Tranforma datos a JSON para tratar en JS {}
         .then(data => {   // Pintar preguntas
             for (let i = 0; i < data.results.length; i++) {
+                if (i != 9) {
+                    let pie = `<input type = "text" value = "Next Question" class="css-button-rounded--green"/> `;
+                    document.getElementById("botones").innerHTML = pie;
+                }
+                else {
+                    let pie = `<input type = "submit" value = "End Game" class="css-button-rounded--blue"/> `;
+                    document.getElementById("botones").innerHTML = pie;
+                }
+
                 let pregunta = data.results[i].question;
                 let respuestas = data.results[i].incorrect_answers;
                 let correcta = data.results[i].correct_answer;
-                let arrayUsuario
+
+
                 //sumamos la pregunta correcta al array de preguntas incorrectas
                 respuestas.push(correcta);
 
@@ -57,18 +67,8 @@ async function DibujarPreguntas() {
                             <input type="radio" id="${i}" name="${i}" value="${correcta}"/>${ArrayRespuestasAleatorias[3]}<br></div>`
                 document.getElementById("hijos").innerHTML = datos2;
 
-                if (i != 9) {
-                    let pie = `<input type = "text" value = "Next Question" class="css-button-rounded--green"/> `;
-                    document.getElementById("botones").innerHTML = pie;
-                }
-                else {
-                    let pie = `<input type = "submit" value = "End Game" class="css-button-rounded--blue"/> `;
-                    document.getElementById("botones").innerHTML = pie;
-                }
+                
             }
-            //document.getElementById("hijos").innerHTML = questions;
-
-
         })
     return;
 }
