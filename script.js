@@ -25,14 +25,15 @@ function PreguntaAleatoria(array) {
 }
 
 //ESCRIBIMOS LAS PREGUNTAS MODIFICANDO EL DOM
-function DibujarPreguntas() {
-    fetch('https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple')
+async function DibujarPreguntas() {
+    await fetch('https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple')
         .then((res) => res.json()) // Tranforma datos a JSON para tratar en JS {}
         .then(data => {   // Pintar preguntas
             for (let i = 0; i < data.results.length; i++) {
                 let pregunta = data.results[i].question;
                 let respuestas = data.results[i].incorrect_answers;
                 let correcta = data.results[i].correct_answer;
+                let arrayUsuario
                 //sumamos la pregunta correcta al array de preguntas incorrectas
                 respuestas.push(correcta);
 
@@ -41,41 +42,42 @@ function DibujarPreguntas() {
                 console.log(data.results[i].correct_answer);
                 console.log(respuestas); */
 
-                let datos = `<b>${pregunta}></b>`
-                document.querySelector("legend").innerHTML = datos;
-
                 //CREAMOS FUNCION PARA ESCRIBIR LAS RESPUESTAS EN DISTINTO ORDEN Y LO PONGA EN EL DOM
-                let ArrayRespuestasAleatorias=PreguntaAleatoria(respuestas);
+                let ArrayRespuestasAleatorias = PreguntaAleatoria(respuestas);
+                console.log(ArrayRespuestasAleatorias);
 
-                let questions=`<input type="radio" id="${i}" name="${i}" value="${correcta}"/>${ArrayRespuestasAleatorias[0]}`;
+                let datos = "<div>";
+                datos = `<h3>Question ` + (i + 1) + " - " + `${pregunta}</h3></div>`
+                document.getElementById("padre").innerHTML = datos;
+
+                let datos2 = "<div>";
+                datos2 += `<input type="radio" id="${i}" name="${i}" value="${correcta}"/>${ArrayRespuestasAleatorias[0]}<br>
+                            <input type="radio" id="${i}" name="${i}" value="${correcta}"/>${ArrayRespuestasAleatorias[1]}<br>
+                            <input type="radio" id="${i}" name="${i}" value="${correcta}"/>${ArrayRespuestasAleatorias[2]}<br>
+                            <input type="radio" id="${i}" name="${i}" value="${correcta}"/>${ArrayRespuestasAleatorias[3]}<br></div>`
+                document.getElementById("hijos").innerHTML = datos2;
+
+                if (i != 9) {
+                    let pie = `<input type = "text" value = "Next Question" class="css-button-rounded--green"/> `;
+                    document.getElementById("botones").innerHTML = pie;
+                }
+                else {
+                    let pie = `<input type = "submit" value = "End Game" class="css-button-rounded--blue"/> `;
+                    document.getElementById("botones").innerHTML = pie;
+                }
             }
+            //document.getElementById("hijos").innerHTML = questions;
+
+
         })
-
-
     return;
 }
 
 DibujarPreguntas();
 
-//METODO PRIMER QUIZ
-/* for (let i = 0; i < preguntas.length; i++) {
-    trivial += `<article>
-                <h3>Pregunta: `+ (i + 1) + " - " + `${preguntas[i].pregunta}</h3>
-                <img src="${preguntas[i].imagen}" width="500" height="300"><br>
-                <label for="${preguntas[i].id}"></label>
-                <div><h4>
-                <input type="radio" id="${preguntas[i].r1}" name="${preguntas[i].id}" value="r1"/>${preguntas[i].r1}<br>
-                <input type="radio" id="${preguntas[i].r2}" name="${preguntas[i].id}" value="r2"/>${preguntas[i].r2}<br>
-                <input type="radio" id="${preguntas[i].r3}" name="${preguntas[i].id}" value="r3"/>${preguntas[i].r3}<br>
-                <input type="radio" id="${preguntas[i].r4}" name="${preguntas[i].id}" value="r4"/>${preguntas[i].r4}</h4></div><br>
-              </article>`
-}
-trivial += `<input type="submit" value="Enviar Respuestas"/>`;
-trivial += "</div>";
-
-document.getElementById("quizForm").innerHTML = trivial; */
-
-
-
 
 //VALIDACION DE RESPUESTAS
+
+    /* document.querySelector("#quizForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // paraliza envío formulario
+}) */

@@ -1,7 +1,73 @@
-.parent {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 50px;
-    grid-row-gap: 50px;
-}    
+
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+#padre {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+#hijos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#botones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* ESTILOS DE LOS BOTONES */
+.css-button-rounded--green {
+    min-width: 130px;
+    height: 40px;
+    color: #fff;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    outline: none;
+    border-radius: 5px;
+    border: 2px solid #57cc99;
+    background: #57cc99;
+}
+
+.css-button-rounded--green:hover {
+    background: #fff;
+    color: #57cc99
+}
+
+.css-button-rounded--blue {
+    min-width: 130px;
+    height: 40px;
+    color: #fff;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    outline: none;
+    border-radius: 5px;
+    border: 2px solid #2c0b8e;
+    background: #2c0b8e;
+}
+
+.css-button-rounded--blue:hover {
+    background: #fff;
+    color: #2c0b8e
+}
