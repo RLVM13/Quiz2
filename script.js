@@ -1,3 +1,4 @@
+
 /*let a = ['Java Vendor Machine', 'Java Visual Machine', 'Just Virtual Machine', 'Java Virtual Machine'];
  function PreguntaAleatoria(array) {
     let resp = [];
@@ -18,16 +19,19 @@ let index = 0;
 
 //FUNCION PARA ESCRIBIR LAS PREGUNTAS ALEATORIAS Y NO SALGAN EN EL MISMO ORDEN
 function PreguntaAleatoria(array) {
+
   for (let i = array.length - 1; i > 0; i--) {
     //SE REALIZAN 2 CAMBIOS ALEATORIOS
     const j = Math.floor(Math.random() * (i - 0 + 1) + 0);
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
+
 }
 
 //ESCRIBIMOS LAS PREGUNTAS MODIFICANDO EL DOM
 function TratamientoDatos() {
+
   fetch(
     "https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple"
   )
@@ -78,6 +82,7 @@ function DibujarRespuestas(i2, c, r) {
                          <div class="radios"><input type="radio" name="${i2}" value="${c}"/>${r[3]}</div>
   </div>`;
   document.getElementById("hijos").innerHTML = datos2;
+
 }
 
 TratamientoDatos();
@@ -86,4 +91,6 @@ TratamientoDatos();
 
 /* document.querySelector("#quizForm").addEventListener("submit", function (event) {
 event.preventDefault(); // paraliza envío formulario
+
 }) */
+
