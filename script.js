@@ -3,6 +3,7 @@ let index = 0; //contador global de preguntas
 let score = 0;
 let player = "";
 const partida = [{}];
+let storage = 0;
 
 //ESCRIBIMOS LAS PREGUNTAS MODIFICANDO EL DOM
 async function consultarApi() {
@@ -77,46 +78,31 @@ function pintarRespuestas(objeto, indice) {
                 jugada.answer = opcionElegida;
                 jugada.correct = objeto.results[indice].correct_answer;
                 jugada.score = score;
-                partida.push(jugada);
-                index++;
-                console.log(partida);
-                localStorage.setItem("quiz2", JSON.stringify(partida));
-                //guardarPartida(jugada);
+                //AÑADIMOS LOS DATOS DE LA PARTIDA
+                guardarPartida(jugada);
                 pintarPregunta(objeto, index);
                 pintarRespuestas(objeto, index);
             }
         })
     }
     else {
-        
         let pie = `<input type="button" value="Play Again" class="css-button-rounded--green2"/>`;
         pie += `<input type="button" value="End Game" class="css-button-rounded--blue"/>`;
         document.getElementById("botones").innerHTML = pie;
+        document.getElementById("padre").innerHTML = "";
+        let gameOver=`<img src="./assets/gameOver.gif" alt="gameOver" id="gameOver">`;
+        document.getElementById("hijos").innerHTML = gameOver;
         return;
     }
 }
 
-function guardarPartida(partida) {
-    console.log(partida);
-    //Escribir LocalStorage
-    //if (index != 10) {
-    jugada.push(partida)
-    console.log(jugada);
-    localStorage.setItem("quiz2", JSON.stringify(jugada));
+function guardarPartida(game) {
+    partida.push(game);
+    index++;
+    console.log(game);
+    //GUARDAMOS EN LOCAL STORAGE LOS RESULTADOS
+    localStorage.setItem("Quiz2-" + storage, JSON.stringify(partida));
 }
-//else {
-
-// }
-//localStorage.setItem("quiz2", JSON.stringify(jugada));
-//Leer LocalStorage
-//let retrievedData = localStorage.getItem("quiz2");
-
-//Resuperar de LocalStorage al final del juego
-//let masDatos = JSON.parse(localStorage.getItem("quiz2"));
-//Añadir elementos a un objeto que ya está creado en LocalStorage
-//masDatos.push(datosJugador);
-//localStorage.setItem("jugada", JSON.stringify("quiz2"));
-//}
 
 consultarApi();
 
