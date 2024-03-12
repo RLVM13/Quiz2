@@ -1,114 +1,15 @@
 
 let index = 0; //contador global de preguntas
-let player; //nombre del jugador
-
-const objeto = [
-    {
-        id: 0,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-    {
-        id: 1,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-    {
-        id: 2,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-    {
-        id: 3,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-    {
-        id: 4,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-    {
-        id: 5,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-    {
-        id: 6,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-    {
-        id: 7,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-    {
-        id: 8,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-    {
-        id: 9,
-        question: "",
-        answer0: "",
-        answer1: "",
-        answer2: "",
-        answer3: "",
-        correct: "",
-    },
-]
-
-const respuestasUsuario=[
-    {
-        id:0,
-        respuesta0:
-        
-
-    },
-]
+let score = 0;
+let player = "";
+const partida = [{}];
 
 //ESCRIBIMOS LAS PREGUNTAS MODIFICANDO EL DOM
-async function ConsultarApi() {
+async function consultarApi() {
     await fetch("https://opentdb.com/api.php?amount=10&category=18&difficulty=easy&type=multiple")
         .then((res) => res.json()) // Tranforma datos a JSON para tratar en JS {}
         .then((data) => {
+            player = prompt("Dame tu alias de jugador");
             for (let i = 0; i < 10; i++) {
                 let pregunta = data.results[i].question;
                 let respuestas = data.results[i].incorrect_answers;
@@ -118,25 +19,16 @@ async function ConsultarApi() {
                 respuestas.push(correcta);
 
                 //CREAMOS FUNCION PARA ESCRIBIR LAS RESPUESTAS EN DISTINTO ORDEN Y LO PONGA EN EL DOM
-                let ArrayRespuestasAleatorias = ColocarAleatoria(respuestas);
-
-                objeto[i].question = pregunta;
-                objeto[i].answer0 = ArrayRespuestasAleatorias[0];
-                objeto[i].answer1 = ArrayRespuestasAleatorias[1];
-                objeto[i].answer2 = ArrayRespuestasAleatorias[2];
-                objeto[i].answer3 = ArrayRespuestasAleatorias[3];
-                objeto[i].correct = correcta;
-                //console.log(objeto);
+                let ArrayRespuestasAleatorias = colocarAleatoria(respuestas);
             }
-            PintarPregunta(objeto, 0);
-            PintarRespuestas(objeto, 0);
-
+            pintarPregunta(data, index);
+            pintarRespuestas(data, index);
         });
     return;
 }
 
 //FUNCION PARA ESCRIBIR LAS PREGUNTAS ALEATORIAS Y NO SALGAN EN EL MISMO ORDEN
-function ColocarAleatoria(array) {
+function colocarAleatoria(array) {
     for (let i = array.length - 1; i > 0; i--) { //SE REALIZAN 2 CAMBIOS ALEATORIOS
         const j = Math.floor(Math.random() * (i - 0 + 1) + 0);
         [array[i], array[j]] = [array[j], array[i]];
@@ -144,63 +36,89 @@ function ColocarAleatoria(array) {
     return array;
 }
 
-function PintarPregunta(objeto, indice) {
-    let datos = "<div>";
-    datos = `<h3>Question ` + (indice + 1) + " - " + `${objeto[indice].question}</h3></div>`;
-    document.getElementById("padre").innerHTML = datos;
-    return;
+function pintarPregunta(objeto, indice) {
+    if (indice != 10) {
+        //console.log(objeto);
+        let datos = "<div>";
+        datos = `<h3>Question ` + (indice + 1) + " - " + `${objeto.results[indice].question}</h3></div>`;
+        document.getElementById("padre").innerHTML = datos;
+    }
+    else { return };
 }
 
-function PintarRespuestas(objeto, indice) {
-    let datos2 = "<div>";
-    datos2 += `<input type="radio" id="r${indice}-0" name="r${indice}" value="${objeto[indice].answer0}"/>${objeto[indice].answer0}<br>
-               <input type="radio" id="r${indice}-1" name="r${indice}" value="${objeto[indice].answer1}"/>${objeto[indice].answer1}<br>
-               <input type="radio" id="r${indice}-2" name="r${indice}" value="${objeto[indice].answer2}"/>${objeto[indice].answer2}<br>
-               <input type="radio" id="r${indice}-3" name="r${indice}" value="${objeto[indice].answer3}"/>${objeto[indice].answer3}<br></div>`;
-    document.getElementById("hijos").innerHTML = datos2;
-
-    if (indice < 10) {
+function pintarRespuestas(objeto, indice) {
+    if (indice != 10) {
+        let datos2 = "<div>";
+        datos2 += `<input type="radio" id="r${indice}-0" name="r${indice}" value="${objeto.results[indice].incorrect_answers[0]}"/>${objeto.results[indice].incorrect_answers[0]}<br>
+               <input type="radio" id="r${indice}-1" name="r${indice}" value="${objeto.results[indice].incorrect_answers[1]}"/>${objeto.results[indice].incorrect_answers[1]}<br>
+               <input type="radio" id="r${indice}-2" name="r${indice}" value="${objeto.results[indice].incorrect_answers[2]}"/>${objeto.results[indice].incorrect_answers[2]}<br>
+               <input type="radio" id="r${indice}-3" name="r${indice}" value="${objeto.results[indice].incorrect_answers[3]}"/>${objeto.results[indice].incorrect_answers[3]}<br></div>`;
+        document.getElementById("hijos").innerHTML = datos2;
         let pie = `<input type="button" value="Next Question" class="css-button-rounded--green"/>`;
         document.getElementById("botones").innerHTML = pie;
 
         //AL PULSAR PARA PASAR A LA SIGUIENTE PREGUNTA
         document.getElementsByClassName("css-button-rounded--green")[0].addEventListener("click", function () {
             let opcionElegida = document.querySelector(`input[type="radio"]:checked`).value;
-            console.log(opcionElegida);
-            index++;
-            console.log(index);
-            PintarPregunta(objeto, index);
-            PintarRespuestas(objeto,index);
+            if (opcionElegida == "") {
+                alert("Contesta la pregunta para pasar a la siguiente");
+            }
+            else {
+                //VALIDACION DE RESPUESTAS
+                if (opcionElegida == objeto.results[indice].correct_answer) { score++; }
+
+                const jugada = {};
+                //ALMACENAR RESPUESTAS DE LA PARTIDA
+                const tiempo = new Date().toLocaleDateString();
+                jugada.id = index;
+                jugada.player = player;
+                jugada.fecha = tiempo;
+                jugada.question = objeto.results[indice].question;
+                jugada.answer = opcionElegida;
+                jugada.correct = objeto.results[indice].correct_answer;
+                jugada.score = score;
+                partida.push(jugada);
+                index++;
+                console.log(partida);
+                localStorage.setItem("quiz2", JSON.stringify(partida));
+                //guardarPartida(jugada);
+                pintarPregunta(objeto, index);
+                pintarRespuestas(objeto, index);
+            }
         })
     }
     else {
-        let pie = `<input type="button" value="End Game" class="css-button-rounded--blue"/>`;
+        
+        let pie = `<input type="button" value="Play Again" class="css-button-rounded--green2"/>`;
+        pie += `<input type="button" value="End Game" class="css-button-rounded--blue"/>`;
         document.getElementById("botones").innerHTML = pie;
+        return;
     }
 }
 
-/* function guardarDatosJugador(player, question, resp, ok) {
-    let veces = 0;
-    const tiempo = new Date().toLocaleDateString();
-    console.log(tiempo);
-    //const tiempoTranscurrido = Date.now();
-    //const hoy = new Date(tempoTranscurrido);
-    if (veces < 10) {
- 
-        contestaciones[veces].jugador = player;
-        contestaciones[veces].fecha = tiempo;
-        contestaciones[veces].pregunta = question;
-        contestaciones[veces].respuesta = resp;
-        contestaciones[veces].correcta = ok;
-    }
-    //Escribir Local Staorage
-    localStorage.setItem("quiz2", JSON.stringify(contestaciones));
-    //Leer Local Storage
-    var retrievedData = localStorage.getItem("quiz2");
-    return;
-} */
+function guardarPartida(partida) {
+    console.log(partida);
+    //Escribir LocalStorage
+    //if (index != 10) {
+    jugada.push(partida)
+    console.log(jugada);
+    localStorage.setItem("quiz2", JSON.stringify(jugada));
+}
+//else {
 
-ConsultarApi();
+// }
+//localStorage.setItem("quiz2", JSON.stringify(jugada));
+//Leer LocalStorage
+//let retrievedData = localStorage.getItem("quiz2");
 
-//VALIDACION DE RESPUESTAS
+//Resuperar de LocalStorage al final del juego
+//let masDatos = JSON.parse(localStorage.getItem("quiz2"));
+//Añadir elementos a un objeto que ya está creado en LocalStorage
+//masDatos.push(datosJugador);
+//localStorage.setItem("jugada", JSON.stringify("quiz2"));
+//}
+
+consultarApi();
+
+
 

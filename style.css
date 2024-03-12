@@ -27,10 +27,13 @@ h1 {
 
 #botones {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     margin: 0 auto;
     padding: 2rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: stretch;
 }
 
 /* ESTILOS DE LOS BOTONES */
@@ -74,6 +77,27 @@ h1 {
 .css-button-rounded--blue:hover {
     background: #fff;
     color: #2c0b8e
+}
+
+.css-button-rounded--green2 {
+    min-width: 130px;
+    height: 40px;
+    color: #fff;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    outline: none;
+    border-radius: 5px;
+    border: 2px solid #2ff70b;
+    background: #2ff70b;
+}
+
+.css-button-rounded--green2:hover {
+    background: #fff;
+    color: #2ff70b
 }
 
 @media screen and (min-width: 576px) {  /* tablet */
