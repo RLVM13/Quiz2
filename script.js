@@ -3,7 +3,6 @@ let index = 0; //contador global de preguntas
 let score = 0;
 let player = "";
 const partida = [{}];
-let storage = 0;
 
 //ESCRIBIMOS LAS PREGUNTAS MODIFICANDO EL DOM
 async function consultarApi() {
@@ -49,11 +48,27 @@ function pintarPregunta(objeto, indice) {
 
 function pintarRespuestas(objeto, indice) {
     if (indice != 10) {
-        let datos2 = "<div>";
-        datos2 += `<input type="radio" id="r${indice}-0" name="r${indice}" value="${objeto.results[indice].incorrect_answers[0]}"/>${objeto.results[indice].incorrect_answers[0]}<br>
+        /* let datos2 = "<div>";
+            datos2 += `<input type="radio" id="r${indice}-0" name="r${indice}" value="${objeto.results[indice].incorrect_answers[0]}"/>${objeto.results[indice].incorrect_answers[0]}<br>
                <input type="radio" id="r${indice}-1" name="r${indice}" value="${objeto.results[indice].incorrect_answers[1]}"/>${objeto.results[indice].incorrect_answers[1]}<br>
                <input type="radio" id="r${indice}-2" name="r${indice}" value="${objeto.results[indice].incorrect_answers[2]}"/>${objeto.results[indice].incorrect_answers[2]}<br>
-               <input type="radio" id="r${indice}-3" name="r${indice}" value="${objeto.results[indice].incorrect_answers[3]}"/>${objeto.results[indice].incorrect_answers[3]}<br></div>`;
+               <input type="radio" id="r${indice}-3" name="r${indice}" value="${objeto.results[indice].incorrect_answers[3]}"/>${objeto.results[indice].incorrect_answers[3]}<br></div>`; */
+
+        let datos2 = "<div>";
+        datos2 += `<div class="radios">
+                    <input type="radio" id="r${indice}-0" name="r${indice}" value="${objeto.results[indice].incorrect_answers[0]}"/>
+                    <label for="r${indice}-0">${objeto.results[indice].incorrect_answers[0]}</label></div>
+                <div class="radios">
+                    <input type="radio" id="r${indice}-1" name="r${indice}" value="${objeto.results[indice].incorrect_answers[1]}"/>
+                    <label for="r${indice}-1">${objeto.results[indice].incorrect_answers[1]}</label></div>
+                <div class="radios">
+                    <input type="radio" id="r${indice}-2" name="r${indice}" value="${objeto.results[indice].incorrect_answers[2]}"/>
+                    <label for="r${indice}-2">${objeto.results[indice].incorrect_answers[2]}</label></div>
+                <div class="radios">
+                    <input type="radio" id="r${indice}-3" name="r${indice}" value="${objeto.results[indice].incorrect_answers[3]}"/>
+                    <label for="r${indice}-3">${objeto.results[indice].incorrect_answers[3]}</label>
+                </div>`
+
         document.getElementById("hijos").innerHTML = datos2;
         let pie = `<input type="button" value="Next Question" class="css-button-rounded--green"/>`;
         document.getElementById("botones").innerHTML = pie;
@@ -86,12 +101,26 @@ function pintarRespuestas(objeto, indice) {
         })
     }
     else {
+        //LLEGAMOS A LAS 10 PREGUNTAS, FINALIZA LA PARTIDA Y MOSTRAMOS BOTONES
         let pie = `<input type="button" value="Play Again" class="css-button-rounded--green2"/>`;
         pie += `<input type="button" value="End Game" class="css-button-rounded--blue"/>`;
         document.getElementById("botones").innerHTML = pie;
         document.getElementById("padre").innerHTML = "";
-        let gameOver=`<img src="./assets/gameOver.gif" alt="gameOver" id="gameOver">`;
+        let gameOver = `<img src="./assets/gameOver.gif" alt="gameOver" id="gameOver">`;
         document.getElementById("hijos").innerHTML = gameOver;
+
+        //CUANDO EL JUGADOR FINALIZA EL JUEGO Y VE LA TABLA DE RESULTADOS
+        document.getElementsByClassName("css-button-rounded--blue")[0].addEventListener("click", function () {
+            alert("Tu puntuación ha sido de " + score);
+            window.close();
+        })
+
+        //CUANDO EL JUGADOR QUIERE JUGAR OTRA PARTIDA
+        document.getElementsByClassName("css-button-rounded--green2")[0].addEventListener("click", function () {
+            window.open('questions.html', '_self');
+            nuevaPartida();
+        })
+
         return;
     }
 }
@@ -101,7 +130,25 @@ function guardarPartida(game) {
     index++;
     console.log(game);
     //GUARDAMOS EN LOCAL STORAGE LOS RESULTADOS
-    localStorage.setItem("Quiz2-" + storage, JSON.stringify(partida));
+    localStorage.setItem("Quiz2", JSON.stringify(partida));
+    //FALTARIA LEER DE LOCAL STORAGE, TRANSFORMAR DATOS CON PARSE, AÑADIR NUEVA PARTIDA CON PUSH Y VOLVER A GRABAR DATOS
+}
+
+function nuevaPartida(){
+    score=0;
+    let newGame = JSON.parse(localStorage.getItem("Quiz2"));
+    //CUARDAMOS LOS DATOS DE LA NUEVA PARTIDA
+    const newJugada = {};
+    const tiempo = new Date().toLocaleTimeString();
+    newJugada.id = index;
+    newJugada.player = player;
+    newJugada.fecha = tiempo;
+    newJugada.question = objeto.results[indice].question;
+    newJugada.answer = opcionElegida;
+    newJugada.correct = objeto.results[indice].correct_answer;
+    newJugada.score = score;
+    newGame.push(newJugada);
+    localStorage.setItem("Quiz2", JSON.stringify(newJugada));
 }
 
 consultarApi();
